@@ -48,7 +48,15 @@ public class AuthenticationKeyManager implements ApplicationContextAware {
         UserDetails ud = null;
         try {
             for (GeoServerUserGroupService ugs : secMgr.loadUserGroupServices()) {
-                ud = ugs.loadUserByUsername(name);
+                try
+                {
+                    ud = ugs.loadUserByUsername(name);
+                }
+                catch(Exception ee)
+                {
+                    LOGGER.log(Level.SEVERE, "Unable to load user information", ee);
+                }
+                
                 if (ud != null) {
                     break;
                 }
